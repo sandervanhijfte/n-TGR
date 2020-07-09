@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:xml-module="http://www.mulesoft.org/schema/mule/xml-module"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/xml-module http://www.mulesoft.org/schema/mule/xml-module/current/mule-xml-module.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<jms:config name="JMS_Config" doc:name="JMS Config"
+		doc:id="d6d9f51f-1f6d-4272-b3c6-30f20b59d367">
+		<jms:active-mq-connection username="admin"
+			password="admin">
+			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
+		</jms:active-mq-connection>
+	</jms:config>
+	<db:config name="MySQL" doc:name="Database Config"
+		doc:id="e9622278-b2e1-4911-adba-6608b8c4adc6">
+		<db:my-sql-connection host="localhost" port="3306"
+			user="GGMD" password="nhf64tw2!dcDDn" database="GGMDLOAD" />
+	</db:config>
+	<http:listener-config name="forminstances_ds_entry_point"
+		doc:name="HTTP Listener config" doc:id="0f7c33a9-8485-4894-a6f5-bb58ad06a82e"
+		basePath="/forminstances_ds">
+		<http:listener-connection host="0.0.0.0" port="8051" />
+	</http:listener-config>
+	<flow name="entry-flow" doc:id="bd43199a-b7c6-4755-9865-16bbcd03cf95" >
+		<http:listener doc:name="Listener" doc:id="65afef98-bc8c-4729-a89c-d7b1e4086115" config-ref="forminstances_ds_entry_point" path="/"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d472435e-2058-4ad0-a91c-de822565107f" message="#[payload]"/>
+	</flow>
+	<flow name="truncate_load_load_cw_forminstances" doc:id="77781d33-f61c-490c-a736-df68611078d2" >
+		<http:listener doc:name="Listener" doc:id="f30b3c0e-1aa8-43d8-bcbd-f623cd04afd4" config-ref="forminstances_ds_entry_point" path="/truncate"/>
+		<db:stored-procedure doc:name="truncate_load_cw_forminstances" doc:id="a20176ce-84c8-4e11-b1a3-ebb8d9ab2293" config-ref="MySQL">
+			<db:sql >call GGMDLOAD.truncate_load_cw_forminstances();</db:sql>
+		</db:stored-procedure>
+	</flow>
+	<flow name="get_request_flow" doc:id="ba3bc69d-9b5b-4388-a07f-51a172d57bcb" >
+		<http:listener doc:name="Listener" doc:id="467db1dc-e4f0-473e-a62f-a54b5b3a94ba" config-ref="forminstances_ds_entry_point" path="/get_requests"/>
+	<db:select doc:name="select_requests" doc:id="634c9da9-5dbd-44c3-8951-39b3708e9fc7" config-ref="MySQL">
+			<db:sql >SELECT * FROM GGMDRULES.request_cw_FormInstances;</db:sql>
+		</db:select>
+		<foreach doc:name="For Each" doc:id="470d2e66-510d-4eb2-8b87-d22c0c77b949" >
+			<set-payload value="#[%dw 2.0
+output application/xml
+---
+
+{
+  Input:{
+	Start:payload.StartDate,
+	End:payload.EndDate,
+	FormId:payload.FormId,
+	PersonID:payload.PersonId,
+	userId:payload.userid,
+	organisationToken:payload.organisationtoken
+	}
+}]" doc:name="set_input" doc:id="e0613ac1-24ca-492e-adf0-d969c95767e3" />
+			<xml-module:xslt-transform doc:name="map_request" doc:id="9def26c5-d849-4e53-bc0a-1de37b445be0" >
+				<xml-module:xslt >&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!--
+Last update: 05-06-2020     Sander van Hijfte
+
+--&gt;
+&lt;xsl:stylesheet version=&quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;&gt;
+    &lt;xsl:strip-space elements=&quot;PersonID FormId&quot; /&gt;
+    &lt;xsl:template match=&quot;/&quot;&gt;
+        &lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;
+                          xmlns:for=&quot;http://schemas.careweb.nl/webservice/2.0/schema/forminstance&quot;
+                          xmlns:com=&quot;http://schemas.careweb.nl/webservice/2.0/types/common&quot;&gt;
+            &lt;soapenv:Header&gt;
+                &lt;for:authenticationDetails &gt;
+                    &lt;com:userId &gt;
+                        &lt;xsl:value-of select=&quot;Input/userId&quot;/&gt;
+                    &lt;/com:userId&gt;
+                    &lt;com:organisationToken&gt;
+                        &lt;xsl:value-of select=&quot;Input/organisationToken&quot;/&gt;
+                    &lt;/com:organisationToken&gt;
+                &lt;/for:authenticationDetails&gt;
+            &lt;/soapenv:Header&gt;
+            &lt;soapenv:Body&gt;
+                &lt;for:ListFormInstancesRequest personId=&quot;{Input/PersonID}&quot;&gt;
+                    &lt;for:Form id=&quot;{Input/FormId}&quot; codeA=&quot;&quot; codeB=&quot;&quot;/&gt;
+                    &lt;for:Start&gt;&lt;xsl:value-of select=&quot;Input/Start&quot;/&gt;&lt;/for:Start&gt;
+                    &lt;for:End&gt;&lt;xsl:value-of select=&quot;Input/End&quot;/&gt;&lt;/for:End&gt;
+                &lt;/for:ListFormInstancesRequest&gt;
+            &lt;/soapenv:Body&gt;
+        &lt;/soapenv:Envelope&gt;
+    &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</xml-module:xslt>
+			</xml-module:xslt-transform>
+			<jms:publish doc:name="publish_request" doc:id="8b858d9b-29d9-41c4-8dd6-6075b9a7893f" config-ref="JMS_Config" destination="forminstances_request"/>
+			</foreach>
+	</flow>
+	<flow name="store_forminstances_flow" doc:id="4d096675-f798-4a01-8e69-66647612212f" >
+		<jms:listener doc:name="listening_for_forminstances" doc:id="a97da83e-2871-4d59-beb3-dd9a1851c22e" config-ref="JMS_Config" destination="forminstance"/>
+		<foreach doc:name="for-each-forminstance" doc:id="aa849038-7ab2-4ecb-a3f6-2b8e8dafb715" collection="#[payload.Envelope.Body.ListFormInstancesResponse]">
+			<xml-module:xslt-transform doc:name="transform_msg_to_json" doc:id="0787b74a-ce7a-437b-b6d6-309d827f5458" outputMimeType="application/json">
+				<xml-module:xslt >&lt;!--
+Former update: 06-06-2020   Sander van Hijfte
+Last update: 03-07-2020     Sander van Hijfte
+To map the nodes you need to refer to the namespace via fi:
+This is an example of mapping the xml to json
+--&gt;
+&lt;xsl:stylesheet version=&quot;1.0&quot;
+                xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot;
+                xmlns:fi=&quot;http://schemas.careweb.nl/webservice/2.0/schema/forminstance&quot;
+                &gt;
+    &lt;xsl:output method=&quot;text&quot;/&gt;
+    &lt;xsl:template match=&quot;/&quot;&gt;
+        &lt;xsl:text&gt;{&amp;#10;  &quot;FormInstance&quot;:&amp;#10;  {&amp;#10;&lt;/xsl:text&gt;
+          &lt;xsl:text&gt;&quot;FormInstanceId&quot;:&quot;&lt;/xsl:text&gt;
+            &lt;xsl:value-of select=&quot;fi:FormInstance/@formInstanceId&quot;/&gt;
+          &lt;xsl:text&gt;&quot;,&amp;#10;&lt;/xsl:text&gt;
+          &lt;xsl:text&gt;&quot;StartDate&quot;:&quot;&lt;/xsl:text&gt;
+            &lt;xsl:value-of select=&quot;fi:FormInstance/fi:startDate&quot;/&gt;
+          &lt;xsl:text&gt;&quot;,&amp;#10;&lt;/xsl:text&gt;
+          &lt;xsl:text&gt;&quot;EndDate&quot;:&quot;&lt;/xsl:text&gt;
+            &lt;xsl:value-of select=&quot;fi:FormInstance/fi:endDate&quot;/&gt;
+          &lt;xsl:text&gt;&quot;&amp;#10;&lt;/xsl:text&gt;
+        &lt;xsl:text&gt;  }&amp;#10;}&lt;/xsl:text&gt;
+    &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</xml-module:xslt>
+			</xml-module:xslt-transform>
+			<db:stored-procedure doc:name="store_forminstance" doc:id="d0cb4ddf-ad42-48ed-b9fc-fa7ccc9d4b4e" config-ref="MySQL">
+				<db:sql >call GGMDLOAD.load_forminstance(:parFORMINSTANCEID,:parSTARTDATE, :parENDDATE);</db:sql>
+				<db:input-parameters ><![CDATA[#[{
+	parFORMINSTANCEID: payload.FormInstance.FormInstanceId,
+	parSTARTDATE: payload.FormInstance.StartDate,
+	parENDDATE: payload.FormInstance.EndDate
+}]]]></db:input-parameters>
+			</db:stored-procedure>
+		</foreach>
+	</flow>
+</mule>

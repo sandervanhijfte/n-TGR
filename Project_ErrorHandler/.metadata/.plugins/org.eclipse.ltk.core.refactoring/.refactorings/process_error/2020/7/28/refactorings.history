@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;process_error/src/main/mule/send_error_mail.xml&apos; to &apos;process_error.xml&apos;" description="Rename resource &apos;send_error_mail.xml&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/mule/send_error_mail.xml" name="process_error.xml" stamp="1594102690788" updateReferences="true"/>
+</session>

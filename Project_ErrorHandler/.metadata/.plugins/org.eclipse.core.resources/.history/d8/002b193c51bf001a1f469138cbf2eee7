@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+	<http:listener-config name="EntryPoint" doc:name="HTTP Listener config" doc:id="41c1698b-4afb-46a3-a011-a1502aeba096" basePath="/test_error_handling" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="a544aaef-92a7-4534-bfc2-d12bf8940d5c" >
+		<db:my-sql-connection host="localhost" port="3306" user="GGMD" password="nhf64tw2!dcDDn" database="GGMDLOAD" />
+	</db:config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="862674ea-f949-47ba-bc44-2fef9ff9b9a5" >
+		<jms:active-mq-connection username="admin" password="admin" >
+			<jms:factory-configuration brokerUrl="tcp://localhost:61616"/>
+		</jms:active-mq-connection>
+	</jms:config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="cf3614d2-a05d-4c98-bc39-c28a9796e31e" >
+		<http:request-connection host="localhost" port="8081" />
+	</http:request-config>
+	<flow name="test_error_handling" doc:id="ec525492-5ae5-4aa3-9bd5-4e39e4ff4715" >
+		<http:listener doc:name="Listener" doc:id="00899ca5-e04a-42a4-b680-9587d09288c5" config-ref="EntryPoint" path="/">
+		</http:listener>
+		<raise-error doc:name="Raise error" doc:id="bd0f82c9-e99d-4757-bdd3-1ab0afd52a80" type="MULE:VALIDATION" description="Anything"/>
+		<logger level="INFO" doc:name="test_message_received" doc:id="47b7dbaf-3acc-4f5e-bbe1-454e7aee4565" message="**test_message_received**"/>
+	</flow>
+	<flow name="error_flow" doc:id="0756f6ef-52b6-4c43-b2f1-989874ee0bea" >
+		<http:listener doc:name="Listener" doc:id="03b766d2-1440-422b-9f0a-4f448904bc59" config-ref="EntryPoint" path="error" allowedMethods="POST"/>
+		<logger level="INFO" doc:name="Logger" doc:id="58898779-c807-490a-9f79-7a5ad1dccbc3" message="#[payload]"/>
+	</flow>
+	<flow name="after_error_continue" doc:id="67c50938-0f2f-42ae-9dbd-3a0a89c5d0f1" >
+		<http:listener doc:name="Listener" doc:id="c5651c5f-c4e0-4f4b-858a-7a9b1fa11c8d" config-ref="EntryPoint" path="continue"/>
+		<db:select doc:name="get_error_messages" doc:id="4483c8dc-7289-4e94-a330-7bea256efc27" config-ref="Database_Config">
+			<non-repeatable-iterable />
+			<db:sql>select * from GGMDLOAD.error_log</db:sql>
+		</db:select>
+		<foreach doc:name="for_each_error" doc:id="5a7845cf-eebd-44c3-9985-b4b1e13483cb" doc:description="For records from a database you don't need to do anything extra.">
+			<set-payload value="#[payload]" doc:name="Set Payload" doc:id="7abd0d6f-dae7-4a95-9e6f-d1633573deca" />
+			<logger level="INFO" doc:name="log_error_message" doc:id="78f7762d-4d6f-4dcb-82c6-0d5417f4075e" message="#[payload]"/>
+		</foreach>
+		<set-payload value="#['done']" doc:name="Set Payload" doc:id="fa0411af-4183-4b68-a971-c9f8b0a042be" />
+		<error-handler>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="1b252786-7847-42f6-ab84-6f68aab528f3" >
+			
+			<set-variable value="after_error_continue" doc:name="flow_name" doc:id="b21bd875-610a-48ad-ab33-e205faf60240" variableName="flow_name" />
+				<set-variable value="test_error_handling" doc:name="component_name" doc:id="b4a0e3f5-dcb5-4fb1-a9fb-f762a593fc08" variableName="component_name"/>
+				<http:request method="POST" doc:name="Request" doc:id="f1cc91b5-81fa-42c9-8bce-21ae1f3a1772" config-ref="HTTP_Request_configuration" path="/test_error_handling/error">
+					<http:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+
+{
+  error:{
+  	component:vars.component_name,
+  	flow:vars.flow_name,
+	description:error.description,
+	time_stamp: now()
+	}
+	
+}]]]></http:body>
+				</http:request>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="test_error_listener_to_jms_2" doc:id="225e2983-6ae8-4c53-b7c0-c0c3466da0d2" >
+		<jms:listener doc:name="On New Message" doc:id="887938d2-814c-4a59-96cc-d03f18128bfb" config-ref="JMS_Config" destination="a_test_1"/>
+		<db:select doc:name="get_error_messages" doc:id="ad28ae3b-d03d-4279-b272-724ab7ad557b" config-ref="Database_Config">
+			<non-repeatable-iterable />
+			<db:sql>select * from GGMDLOAD.error_lo</db:sql>
+		</db:select>
+		<foreach doc:name="for_each_error" doc:id="24756638-e21f-4459-9b76-2e2f95f8a09d" doc:description="For records from a database you don't need to do anything extra.">
+			<set-payload value="#[payload]" doc:name="Set Payload" doc:id="44909777-140c-42b3-a760-c2ac77bae097" />
+			<logger level="INFO" doc:name="log_error_message" doc:id="87525318-7ef2-4174-87f7-3490b49d3071" message="#[payload]"/>
+		</foreach>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="032db7a9-361e-4185-a779-d9f1a8685700" >
+				<logger level="ERROR" doc:name="Logger" doc:id="2db16bad-6ac5-4539-9e54-ebd3e3b215a3" message="#[error.description]"/>
+				<set-variable value="test_error_listener_to_jms_2" doc:name="flow_name" doc:id="7fd3c29a-947a-43a2-a231-9e742c1712ee" variableName="flow_name" />
+				<jms:publish doc:name="Publish" doc:id="0d56e801-6ac4-4a9e-8c6d-76db9f79082f" config-ref="JMS_Config" destination="error_queue">
+					<jms:message >
+						<jms:body ><![CDATA[#[%dw 2.0
+output application/xml
+---
+
+{
+  erorr:{
+  	test:vars.flow_name,
+	message:error.description
+	}
+	
+}]]]></jms:body>
+					</jms:message>
+				</jms:publish>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="test_error_listener_to_jms" doc:id="95b9978c-2335-411b-817c-f2145c0f3822" >
+		<jms:listener doc:name="On New Message" doc:id="92b8dfe2-6cfa-4e39-9436-bda59417a040" config-ref="JMS_Config" destination="foo.bar"/>
+		<db:select doc:name="get_error_messages" doc:id="f2387347-af5c-455e-ae60-8c6ee4061115" config-ref="Database_Config">
+			<non-repeatable-iterable />
+			<db:sql>select * from GGMDLOAD.error_lo</db:sql>
+		</db:select>
+		<foreach doc:name="for_each_error" doc:id="09e7cc60-956a-4bde-abfe-b04357a1735e" doc:description="For records from a database you don't need to do anything extra.">
+			<set-payload value="#[payload]" doc:name="Set Payload" doc:id="d86beef6-6ce3-4fa4-ae7f-b9625816913e" />
+			<logger level="INFO" doc:name="log_error_message" doc:id="bbb3d05f-1377-4465-b74b-815776d1a6ff" message="#[payload]"/>
+		</foreach>
+		<error-handler >
+			<on-error-continue enableNotifications="false" logException="true" doc:name="On Error Continue" doc:id="79735119-91b7-4e3e-adbc-ff196aafc45a">
+			<set-variable value="test_error_listener_to_jms" doc:name="flow_name" doc:id="07f93333-82c3-499f-963b-f58406bb01eb" variableName="flow_name" />
+				<set-variable value="test_error_handling" doc:name="component_name" doc:id="ac6676fc-1827-4203-bbeb-7a45e3fee331" variableName="component_name"/>
+				<http:request method="POST" doc:name="Request" doc:id="5d03efc6-0282-4313-a0af-792fb9e4d0c8" config-ref="HTTP_Request_configuration" path="/test_error_handling/error">
+					<http:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+
+{
+  error:{
+  	component:vars.component_name,
+  	flow:vars.flow_name,
+	description:error.description,
+	time_stamp: now()
+	}
+	
+}]]]></http:body>
+				</http:request>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="after_error_stop" doc:id="bad39368-b5ef-4c34-ac9c-92d84d5292b9" >
+		<http:listener doc:name="Listener" doc:id="d950da74-ff79-45ed-8f79-5ec77cbe625f" config-ref="EntryPoint" path="stop"/>
+		<db:select doc:name="get_error_messages" doc:id="f7b2679b-dae1-4421-9550-9b25af3fd556" config-ref="Database_Config">
+			<non-repeatable-iterable />
+			<db:sql>select * from GGMDLOAD.error_lo</db:sql>
+		</db:select>
+		<foreach doc:name="for_each_error" doc:id="b1d746c9-4c30-487a-947e-f0a029c9264a" doc:description="For records from a database you don't need to do anything extra.">
+			<set-payload value="#[payload]" doc:name="Set Payload" doc:id="78a9e847-b876-4722-a477-cbe895b07cb7" />
+			<logger level="INFO" doc:name="log_error_message" doc:id="0add28b2-a86f-44a2-9b2c-b07f90f2635b" message="#[payload]"/>
+		</foreach>
+		<set-payload value="#['done']" doc:name="Set Payload" doc:id="9963d7ed-a92c-4d8a-8181-3e7c4a0dd64b" />
+		<error-handler>
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="d1ef4314-d93a-4d95-9da2-e4b0ef4aad48" >
+			
+			<set-variable value="after_error_stop" doc:name="flow_name" doc:id="7d3f7639-ab62-4163-bba5-4fd7cb17e724" variableName="flow_name" />
+				<set-variable value="test_error_handling" doc:name="component_name" doc:id="4fd6fecc-d036-41c7-aeaf-842783f39914" variableName="component_name"/>
+				<http:request method="POST" doc:name="Request" doc:id="faeafcb6-f7e2-4274-ab64-6f808d7645a5" config-ref="HTTP_Request_configuration" path="/test_error_handling/error">
+					<http:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+
+{
+  error:{
+  	component:vars.component_name,
+  	flow:vars.flow_name,
+	description:error.description,
+	time_stamp: now()
+	}
+	
+}]]]></http:body>
+				</http:request>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

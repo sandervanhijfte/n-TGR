@@ -1,0 +1,473 @@
+!SESSION 2020-07-09 17:14:02.139 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.8.0_131
+java.vendor=Oracle Corporation
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_GB
+Framework arguments:  -keyring /Users/avhijfte/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -keyring /Users/avhijfte/.eclipse_keyring
+
+This is a continuation of log file /Users/avhijfte/MulesoftProjects/Project_ErrorHandler/.metadata/.bak_0.log
+Created Time: 2020-07-09 17:15:37.038
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.039
+!MESSAGE No model found for: org.mule.connectors:mule-jms-connector:1.2.0. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.090
+!MESSAGE Unexpected error loading extension from: org.mule.connectors:mule-sftp-connector:1.1.2
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.connectors:mule-sftp-connector:jar:mule-plugin:1.1.2
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.connectors:mule-sftp-connector:jar:mule-plugin:1.1.2
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.connectors:mule-sftp-connector:jar:mule-plugin:1.1.2
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.091
+!MESSAGE No model found for: org.mule.connectors:mule-sftp-connector:1.1.2. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.163
+!MESSAGE Unexpected error loading extension from: org.mule.connectors:mule-vm-connector:1.1.1
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.connectors:mule-vm-connector:jar:mule-plugin:1.1.1
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.connectors:mule-vm-connector:jar:mule-plugin:1.1.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.connectors:mule-vm-connector:jar:mule-plugin:1.1.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.163
+!MESSAGE No model found for: org.mule.connectors:mule-vm-connector:1.1.1. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.210
+!MESSAGE Unexpected error loading extension from: org.mule.module:mule-java-module:1.0.0
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.module:mule-java-module:jar:mule-plugin:1.0.0
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.module:mule-java-module:jar:mule-plugin:1.0.0
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.module:mule-java-module:jar:mule-plugin:1.0.0
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.211
+!MESSAGE No model found for: org.mule.module:mule-java-module:1.0.0. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.251
+!MESSAGE Unexpected error loading extension from: org.mule.modules:mule-oauth-module:1.1.1
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-oauth-module:jar:mule-plugin:1.1.1
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-oauth-module:jar:mule-plugin:1.1.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.modules:mule-oauth-module:jar:mule-plugin:1.1.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.252
+!MESSAGE No model found for: org.mule.modules:mule-oauth-module:1.1.1. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.284
+!MESSAGE Unexpected error loading extension from: org.mule.modules:mule-scripting-module:1.1.1
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-scripting-module:jar:mule-plugin:1.1.1
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-scripting-module:jar:mule-plugin:1.1.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.modules:mule-scripting-module:jar:mule-plugin:1.1.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.285
+!MESSAGE No model found for: org.mule.modules:mule-scripting-module:1.1.1. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.317
+!MESSAGE Unexpected error loading extension from: org.mule.modules:mule-soapkit-module:1.1.2
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-soapkit-module:jar:mule-plugin:1.1.2
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-soapkit-module:jar:mule-plugin:1.1.2
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.modules:mule-soapkit-module:jar:mule-plugin:1.1.2
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.318
+!MESSAGE No model found for: org.mule.modules:mule-soapkit-module:1.1.2. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.350
+!MESSAGE Unexpected error loading extension from: org.mule.modules:mule-spring-module:1.1.0
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-spring-module:jar:mule-plugin:1.1.0
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-spring-module:jar:mule-plugin:1.1.0
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.modules:mule-spring-module:jar:mule-plugin:1.1.0
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.351
+!MESSAGE No model found for: org.mule.modules:mule-spring-module:1.1.0. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.380
+!MESSAGE Unexpected error loading extension from: org.mule.modules:mule-validation-module:1.2.1
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-validation-module:jar:mule-plugin:1.2.1
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact org.mule.modules:mule-validation-module:jar:mule-plugin:1.2.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact org.mule.modules:mule-validation-module:jar:mule-plugin:1.2.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.380
+!MESSAGE No model found for: org.mule.modules:mule-validation-module:1.2.1. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.423
+!MESSAGE Unexpected error loading extension from: com.mulesoft.connectors:mule-salesforce-connector:9.2.1
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact com.mulesoft.connectors:mule-salesforce-connector:jar:mule-plugin:9.2.1
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact com.mulesoft.connectors:mule-salesforce-connector:jar:mule-plugin:9.2.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact com.mulesoft.connectors:mule-salesforce-connector:jar:mule-plugin:9.2.1
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.424
+!MESSAGE No model found for: com.mulesoft.connectors:mule-salesforce-connector:9.2.1. This dependency wont have an UI to configure it.
+
+!ENTRY org.mule.tooling.core 4 0 2020-07-09 17:15:37.464
+!MESSAGE Unexpected error loading extension from: com.mulesoft.connectors:mule-netsuite-connector:8.1.0
+!STACK 0
+org.mule.maven.client.api.BundleDependenciesResolutionException: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact com.mulesoft.connectors:mule-netsuite-connector:jar:mule-plugin:8.1.0
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:271)
+	at org.mule.tooling.client.internal.DefaultExtensionModelService.loadExtensionData(DefaultExtensionModelService.java:166)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$2(ExtensionModelServiceCache.java:161)
+	at java.util.Optional.orElseGet(Optional.java:267)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$null$3(ExtensionModelServiceCache.java:161)
+	at com.google.common.cache.LocalCache$LocalManualCache$1.load(LocalCache.java:4875)
+	at com.google.common.cache.LocalCache$LoadingValueReference.loadFuture(LocalCache.java:3527)
+	at com.google.common.cache.LocalCache$Segment.loadSync(LocalCache.java:2276)
+	at com.google.common.cache.LocalCache$Segment.lockedGetOrLoad(LocalCache.java:2154)
+	at com.google.common.cache.LocalCache$Segment.get(LocalCache.java:2044)
+	at com.google.common.cache.LocalCache.get(LocalCache.java:3951)
+	at com.google.common.cache.LocalCache$LocalManualCache.get(LocalCache.java:4870)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.lambda$doLoadExtensionInformation$4(ExtensionModelServiceCache.java:149)
+	at org.mule.tooling.client.internal.utils.ServiceUtils.executeHandlingException(ServiceUtils.java:25)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.doLoadExtensionInformation(ExtensionModelServiceCache.java:148)
+	at org.mule.tooling.client.internal.ExtensionModelServiceCache.loadExtensionInformation(ExtensionModelServiceCache.java:142)
+	at org.mule.tooling.client.internal.CachedExtensionModelService.getExtensionModel(CachedExtensionModelService.java:40)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.loadExtensionModel(ToolingExtensionModelAdapter.java:43)
+	at org.mule.tooling.client.internal.ToolingExtensionModelAdapter.invokeMethod(ToolingExtensionModelAdapter.java:88)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.mule.tooling.client.bootstrap.internal.reflection.Dispatcher$ToolingCallable.call(Dispatcher.java:232)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+Caused by: org.eclipse.aether.resolution.ArtifactResolutionException: Could not find artifact com.mulesoft.connectors:mule-netsuite-connector:jar:mule-plugin:8.1.0
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:444)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifacts(DefaultArtifactResolver.java:246)
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolveArtifact(DefaultArtifactResolver.java:223)
+	at org.eclipse.aether.internal.impl.DefaultRepositorySystem.resolveArtifact(DefaultRepositorySystem.java:294)
+	at org.mule.maven.client.internal.AetherMavenClient.resolveBundleDescriptor(AetherMavenClient.java:267)
+	... 27 more
+Caused by: org.eclipse.aether.transfer.ArtifactNotFoundException: Could not find artifact com.mulesoft.connectors:mule-netsuite-connector:jar:mule-plugin:8.1.0
+	at org.eclipse.aether.internal.impl.DefaultArtifactResolver.resolve(DefaultArtifactResolver.java:434)
+	... 31 more
+
+!ENTRY org.mule.tooling.core 2 0 2020-07-09 17:15:37.465
+!MESSAGE No model found for: com.mulesoft.connectors:mule-netsuite-connector:8.1.0. This dependency wont have an UI to configure it.

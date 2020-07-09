@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+	<http:listener-config name="listen_to_synchronizes_sdb" doc:name="HTTP Listener config" doc:id="e7b54fbe-0d5f-4cbe-abe5-9d786900568e" basePath="/">
+		<http:listener-connection host="localhost" port="6066" />
+	</http:listener-config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="844f5295-0da6-419c-9931-43d2115e9b0c" >
+		<jms:active-mq-connection username="admin" password="admin">
+			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
+		</jms:active-mq-connection>
+	</jms:config>
+	<db:config name="local-sql" doc:name="Database Config" doc:id="8dea8cd7-5401-4aca-9271-b1ffe3e6f45e" >
+		<db:my-sql-connection host="localhost" port="3306" user="GGMD" password="nhf64tw2!dcDDn" database="GGMDLOAD" />
+	</db:config>
+	<flow name="get_dienstverbanden_flow" doc:id="696ffd4b-f26b-47c4-ae09-d3a5df4f2246" >
+		<http:listener doc:name="Listener" doc:id="48f2b38a-6ae8-4e75-8d6d-ed3a167773d5" config-ref="listen_to_synchronizes_sdb" path="get_dienstverbanden"/>
+		<db:select doc:name="select_dienstverbanden" doc:id="ebabf46a-bf4c-44e6-bc69-7df4a731fe8c" config-ref="local-sql">
+			<db:sql >select Id,
+MedewerkerId,
+FunctieCode,
+FunctieOmschrijving,
+FunctieKostprijs,
+FunctieProductiviteitsfactor,
+FunctieEindDatum,
+DatumInDienst,
+DatumUitDienst,
+UrenPerWeek,
+ParttimeFactor,
+UrenPerWeekMax,
+DagenPerWeek,
+IsOnbepaald,
+ORTBerekenenUit,
+ContractvormCode,
+ContractvormIsSalaris,
+ContractvormOmschrijving,
+ContractNummer,
+ContractBeginDatum,
+ContractEindDatum,
+AfdelingCode,
+AfdelingOmschrijving,
+AfdelingEindDatum,
+AfdelingHoofdAfdelingCode,
+AfdelingHoofdAfdelingOmschrijving,
+Werklocatie,
+SalarisNominaal,
+SalarisJaarloon,
+CAOCode,
+CAOOmschrijving,
+SchaalTredeId,
+SchaalTredeSchaal,
+SchaalTredeTrede,
+SchaalTredeInpassingCode,
+SchaalTredeBedrag,
+SchaalTredeOmschrijving,
+SchaalTredeBeginDatum,
+SchaalTredeEindDatum,
+GarantieCAO,
+GarantieSchaal,
+AncienniteitsMaand,
+ExtraPeriodiek,
+BlokkerenPeriodiek,
+OntslagCodeCode,
+OntslagCodeOmschrijving,
+Kostensoort1Code,
+Kostensoort1Omschrijving,
+Kostensoort1EindDatum,
+Kostensoort2Code,
+Kostensoort2Omschrijving,
+Kostensoort2EindDatum,
+Kostensoort3Code,
+Kostensoort3Omschrijving,
+Kostensoort3EindDatum,
+Kostensoort4Code,
+Kostensoort4Omschrijving,
+Kostensoort4EindDatum,
+Kostenplaats1Code,
+Kostenplaats1Omschrijving,
+Kostenplaats1EindDatum,
+Kostenplaats2Code,
+Kostenplaats2Omschrijving,
+Kostenplaats2EindDatum,
+Kostenplaats3Code,
+Kostenplaats3Omschrijving,
+Kostenplaats3EindDatum,
+Kostenplaats4Code,
+Kostenplaats4Omschrijving,
+Kostenplaats4EindDatum,
+Kostenverdeling1,
+Kostenverdeling2,
+Kostenverdeling3,
+Kostenverdeling4,
+ROW_ID
+from GGMDLOAD.load_sdb_dienstverbanden;</db:sql>
+		</db:select>
+		<foreach doc:name="For Each" doc:id="579afe14-a3cb-41c1-b4dd-0a236a79488b" >
+			<jms:publish doc:name="publish_dienstverbanden" doc:id="a3befaf1-0167-4b4e-808c-bdb51df17ef6" config-ref="JMS_Config" destination="dienstverbanden_queue">
+				<jms:message >
+					<jms:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+payload]]]></jms:body>
+				</jms:message>
+			</jms:publish>
+		</foreach>
+		<logger level="INFO" doc:name="Logger" doc:id="571cc725-8773-4f11-9a95-6de48e6deff1" message="**done**"/>
+	</flow>
+	<flow name="load_medewerker_adres" doc:id="7387da50-515e-4898-90ad-d43eca5b3092" >
+		<jms:listener doc:name="Listener" doc:id="abaa28e5-05dd-4953-8308-50d0cf690205" config-ref="JMS_Config" destination="sdb_medewerker_adres_queue"/>
+		<db:stored-procedure doc:name="Stored procedure" doc:id="2b0e8f8b-b57e-44cf-a20f-a8f2c77594d8" config-ref="local-sql">
+			<db:sql >call GGMDLOAD.Load_Medewerkeradressen(
+ :medewerkerId,
+ :Straatnaam,
+ :Postcode,
+ :Woonplaats,
+ :LandCode2Tekens,
+ :LandCode3Tekens,
+ :LandISOCode,
+ :LandOmschrijving,
+ :Huisnummer
+ );
+</db:sql>
+			<db:input-parameters ><![CDATA[#[{
+ medewerkerId:payload.Adres.id,
+ Straatnaam:payload.Adres.adress.Straatnaam,
+ Postcode:payload.Adres.adress.Postcode,
+ Woonplaats:payload.Adres.adress.Woonplaats,
+ LandCode2Tekens:payload.Adres.adress.Land.Code2Tekens,
+ LandCode3Tekens:payload.Adres.adress.Land.Code3Tekens,
+ LandISOCode:payload.Adres.adress.Land.ISOCode,
+ LandOmschrijving:payload.Adres.adress.Land.Omschrijving,
+ Huisnummer:payload.Adres.adress.Huisnummer
+}]]]></db:input-parameters>
+		</db:stored-procedure>
+	</flow>
+	<flow name="get_medewerkers_dsFlow" doc:id="b5e864b8-498c-4507-8e0a-d138a288f28c" >
+		<http:listener doc:name="Listener" doc:id="04ba4fb9-a99b-4485-b69b-8e101e0dd4b2" config-ref="listen_to_synchronizes_sdb" path="get_medewerkers"/>
+		<db:select doc:name="Select" doc:id="95f13862-9e73-480d-85ef-93560bc0e610" config-ref="local-sql">
+			<db:sql >select Id,Voorletters,Tussenvoegsel,AchterNaam,RoepNaam,Geslacht,GeboorteDatum,DatumInSector,GeboortePlaats,BurgerServiceNummer,BurgerlijkestaatCode,BurgerlijkestaatOmschrijving,NationaliteitCode,NationaliteitOmschrijving,Titel,IsBedrijfsHulpVerlener,TenaamstellingCode,TenaamstellingOmschrijving,Email,PartnerVoorletters,PartnerTussenvoegsel,PartnerAchternaam,PartnerGeboortedatum
+ from load_sdb_medewerkers</db:sql>
+		</db:select>
+		<foreach doc:name="For Each" doc:id="1db2abd2-20d9-44dc-a2dc-9ff0d5033541" >
+			<jms:publish doc:name="publish_medewerkers" doc:id="ae185c88-554d-461e-b3b1-fa613eff9724" config-ref="JMS_Config" destination="medewerkers_queue">
+				<jms:message outboundContentType="application/json" >
+					<jms:body ><![CDATA[#[%dw 2.0
+output application/json
+---
+payload]]]></jms:body>
+				</jms:message>
+			</jms:publish>
+		</foreach>
+		<set-payload value="#['done retrieving medewerkers from load_sdb_medewerkers']" doc:name="Set Payload" doc:id="954f9965-63a7-4091-b6b6-c8a990f09e80" />
+	</flow>
+	<flow name="load_dienstverbandperiodes" doc:id="9f487fcc-3399-442b-b61f-44beadf2657f" doc:description="This is the last step in the synchronysation of the sdb tables. We store the dienstverbandperiodes and call the stored procedure that creates a ROWID for all the tables.">
+		<jms:listener doc:name="listen_for_sdb_dienstverbandperiodes_queue" doc:id="0f1aea7f-f9fb-40b1-a400-27edf2f44c39" config-ref="JMS_Config" destination="sdb_dienstverbandperiodes_queue"/>
+	<foreach doc:name="for-each-DienstverbandPeriode" doc:id="6eeb6922-79a6-4193-9882-87a080a195ee" collection="#[payload.ArrayOfDienstverbandPeriode]">
+			<db:stored-procedure doc:name="store_dienstverbangperiodes" doc:id="a0ee729a-300c-49d4-8d3f-5b148ec9be38" config-ref="local-sql">
+			<db:sql >call GGMDLOAD.Load_DienstverbandPeriodes(
+  :DienstverbandId,
+  :PeriodeBeginDatum,
+  :PeriodeEindDatum,
+  :AfdelingCode,
+  :AfdelingOmschrijving,
+  :AfdelingEindDatum,
+  :AfdelingHoofdAfdelingCode,
+  :AfdelingHoodfAfdelingOmschrijving,
+  :FunctieCode,
+  :FunctieOmschrijving,
+  :FunctieKostprijs,
+  :FunctieProductiviteitsfactor,
+  :FunctieEindDatum,
+  :ContractvormCode,
+  :ContractvormIsSalaris,
+  :ContractvormOmschrijving,
+  :UrenPerWeek,
+  :UrenPerWeekMax,
+  :SchaalTredeId,
+  :SchaalTredeSchaal,
+  :SchaalTredeTrede,
+  :SchaalTredeInpassingCode,
+  :SchaalTredeBedrag,
+  :SchaalTredeOmschrijving,
+  :SchaalTredeBeginDatum,
+  :SchaalTredeEindDatum,
+  :SalarisNominaal,
+  :CAOCode,
+  :CAOOmschrijving,
+  :Kostensoort1Code,
+  :Kostensoort1Omschrijving,
+  :Kostensoort1EindDatum,
+  :Kostensoort2Code,
+  :Kostensoort2Omschrijving,
+  :Kostensoort2EindDatum,
+  :Kostensoort3Code,
+  :Kostensoort3Omschrijving,
+  :Kostensoort3EindDatum,
+  :Kostensoort4Code,
+  :Kostensoort4Omschrijving,
+  :Kostensoort4EindDatum,
+  :Kostenplaats1Code,
+  :Kostenplaats1Omschrijving,
+  :Kostenplaats1EindDatum,
+  :Kostenplaats2Code,
+  :Kostenplaats2Omschrijving,
+  :Kostenplaats2EindDatum,
+  :Kostenplaats3Code,
+  :Kostenplaats3Omschrijving,
+  :Kostenplaats3EindDatum,
+  :Kostenplaats4Code,
+  :Kostenplaats4Omschrijving,
+  :Kostenplaats4EindDatum,
+  :Kostenverdeling1,
+  :Kostenverdeling2,
+  :Kostenverdeling3,
+  :Kostenverdeling4
+);
+</db:sql>
+			<db:input-parameters ><![CDATA[#[{
+  DienstverbandId: payload.DienstverbandPeriode.DienstverbandId,
+  PeriodeBeginDatum: payload.DienstverbandPeriode.PeriodeBeginDatum,
+  PeriodeEindDatum: payload.DienstverbandPeriode.PeriodeEindDatum,
+  AfdelingCode: payload.DienstverbandPeriode.Afdeling.Code,
+  AfdelingOmschrijving: payload.DienstverbandPeriode.Afdeling.Omschrijving,
+  AfdelingEindDatum: payload.DienstverbandPeriode.Afdeling.EindDatum,
+  AfdelingHoofdAfdelingCode: payload.DienstverbandPeriode.Afdeling.HoofdAfdeling.Code,
+  AfdelingHoodfAfdelingOmschrijving: payload.DienstverbandPeriode.Afdeling.HoodfAfdeling.Omschrijving,
+  FunctieCode: payload.DienstverbandPeriode.Functie.Code,
+  FunctieOmschrijving: payload.DienstverbandPeriode.Functie.Omschrijving,
+  FunctieKostprijs: payload.DienstverbandPeriode.Functie.Kostprijs,
+  FunctieProductiviteitsfactor: payload.DienstverbandPeriode.Functie.Productiviteitsfactor,
+  FunctieEindDatum: payload.DienstverbandPeriode.Functie.EindDatum,
+  ContractvormCode: payload.DienstverbandPeriode.Contractvorm.Code,
+  ContractvormIsSalaris: payload.DienstverbandPeriode.Contractvorm.IsSalaris,
+  ContractvormOmschrijving: payload.DienstverbandPeriode.Contractvorm.Omschrijving,
+  UrenPerWeek: payload.DienstverbandPeriode.UrenPerWeek,
+  UrenPerWeekMax: payload.DienstverbandPeriode.UrenPerWeekMax,
+  SchaalTredeId: payload.DienstverbandPeriode.SchaalTrede.Id,
+  SchaalTredeSchaal: payload.DienstverbandPeriode.SchaalTrede.Schaal,
+  SchaalTredeTrede: payload.DienstverbandPeriode.SchaalTrede.Trede,
+  SchaalTredeInpassingCode: payload.DienstverbandPeriode.SchaalTrede.InpassingCode,
+  SchaalTredeBedrag: payload.DienstverbandPeriode.SchaalTrede.Bedrag,
+  SchaalTredeOmschrijving: payload.DienstverbandPeriode.SchaalTrede.Omschrijving,
+  SchaalTredeBeginDatum: payload.DienstverbandPeriode.SchaalTrede.BeginDatum,
+  SchaalTredeEindDatum: payload.DienstverbandPeriode.SchaalTrede.EindDatum,
+  SalarisNominaal: payload.DienstverbandPeriode.SalarisNominaal,
+  CAOCode: payload.DienstverbandPeriode.CAO.Code,
+  CAOOmschrijving: payload.DienstverbandPeriode.CAO.Omschrijving,
+  Kostensoort1Code: payload.DienstverbandPeriode.Kostensoort1.Code,
+  Kostensoort1Omschrijving: payload.DienstverbandPeriode.Kostensoort1.Omschrijving,
+  Kostensoort1EindDatum: payload.DienstverbandPeriode.Kostensoort1.EindDatum,
+  Kostensoort2Code: payload.DienstverbandPeriode.Kostensoort2.Code,
+  Kostensoort2Omschrijving: payload.DienstverbandPeriode.Kostensoort2.Omschrijving,
+  Kostensoort2EindDatum: payload.DienstverbandPeriode.Kostensoort2.EindDatum,
+  Kostensoort3Code: payload.DienstverbandPeriode.Kostensoort3.Code,
+  Kostensoort3Omschrijving: payload.DienstverbandPeriode.Kostensoort3.Omschrijving,
+  Kostensoort3EindDatum: payload.DienstverbandPeriode.Kostensoort3.EindDatum,
+  Kostensoort4Code: payload.DienstverbandPeriode.Kostensoort4.Code,
+  Kostensoort4Omschrijving: payload.DienstverbandPeriode.Kostensoort4.Omschrijving,
+  Kostensoort4EindDatum: payload.DienstverbandPeriode.Kostensoort4.EindDatum,
+  Kostenplaats1Code: payload.DienstverbandPeriode.Kostenplaats1.Code,
+  Kostenplaats1Omschrijving: payload.DienstverbandPeriode.Kostenplaats1.Omschrijving,
+  Kostenplaats1EindDatum: payload.DienstverbandPeriode.Kostenplaats1.EindDatum,
+  Kostenplaats2Code: payload.DienstverbandPeriode.Kostenplaats2.Code,
+  Kostenplaats2Omschrijving: payload.DienstverbandPeriode.Kostenplaats2.Omschrijving,
+  Kostenplaats2EindDatum: payload.DienstverbandPeriode.Kostenplaats2.EindDatum,
+  Kostenplaats3Code: payload.DienstverbandPeriode.Kostenplaats3.Code,
+  Kostenplaats3Omschrijving: payload.DienstverbandPeriode.Kostenplaats3.Omschrijving,
+  Kostenplaats3EindDatum: payload.DienstverbandPeriode.Kostenplaats3.EindDatum,
+  Kostenplaats4Code: payload.DienstverbandPeriode.Kostenplaats4.Code,
+  Kostenplaats4Omschrijving: payload.DienstverbandPeriode.Kostenplaats4.Omschrijving,
+  Kostenplaats4EindDatum: payload.DienstverbandPeriode.Kostenplaats4.EindDatum,
+  Kostenverdeling1: payload.DienstverbandPeriode.Kostenverdeling1,
+  Kostenverdeling2: payload.DienstverbandPeriode.Kostenverdeling2,
+  Kostenverdeling3: payload.DienstverbandPeriode.Kostenverdeling3,
+  Kostenverdeling4: payload.DienstverbandPeriode.Kostenverdeling4
+}]]]></db:input-parameters>
+		</db:stored-procedure>
+		</foreach>
+	</flow>
+	<flow name="load_dienstverbanden" doc:id="672993de-a6a8-483e-88ed-4e942a1d2929" >
+		<jms:listener doc:name="listen_for_sdb_dienstverbanden_queue" doc:id="1fc6a860-65ab-43ad-aa57-276428d830d1" config-ref="JMS_Config" destination="sdb_dienstverbanden_queue"/>
+		<db:stored-procedure doc:name="Stored procedure" doc:id="1128737b-6013-4c9f-9f9a-a25860802df1" config-ref="local-sql">
+			<db:sql >call GGMDLOAD.Load_Dienstverbanden(
+  :Id,
+  :MedewerkerId,
+  :FunctieCode,
+  :FunctieOmschrijving,
+  :FunctieKostprijs,
+  :FunctieProductiviteitsfactor,
+  :FunctieEindDatum,
+  :DatumInDienst,
+  :DatumUitDienst,
+  :UrenPerWeek,
+  :ParttimeFactor,
+  :UrenPerWeekMax,
+  :DagenPerWeek,
+  :IsOnbepaald,
+  :ORTBerekenenUit,
+  :ContractvormCode,
+  :ContractvormIsSalaris,
+  :ContractvormOmschrijving,
+  :ContractNummer,
+  :ContractBeginDatum,
+  :ContractEindDatum,
+  :AfdelingCode,
+  :AfdelingOmschrijving,
+  :AfdelingEindDatum,
+  :AfdelingHoofdAfdelingCode,
+  :AfdelingHoofdAfdelingOmschrijving,
+  :Werklocatie,
+  :SalarisNominaal,
+  :SalarisJaarloon,
+  :CAOCode,
+  :CAOOmschrijving,
+  :SchaalTredeId,
+  :SchaalTredeSchaal,
+  :SchaalTredeTrede,
+  :SchaalTredeInpassingCode,
+  :SchaalTredeBedrag,
+  :SchaalTredeOmschrijving,
+  :SchaalTredeBeginDatum,
+  :SchaalTredeEindDatum,
+  :GarantieCAO,
+  :GarantieSchaal,
+  :AncienniteitsMaand,
+  :ExtraPeriodiek,
+  :BlokkerenPeriodiek,
+  :OntslagCodeCode,
+  :OntslagCodeOmschrijving,
+  :Kostensoort1Code,
+  :Kostensoort1Omschrijving,
+  :Kostensoort1EindDatum,
+  :Kostensoort2Code,
+  :Kostensoort2Omschrijving,
+  :Kostensoort2EindDatum,
+  :Kostensoort3Code,
+  :Kostensoort3Omschrijving,
+  :Kostensoort3EindDatum,
+  :Kostensoort4Code,
+  :Kostensoort4Omschrijving,
+  :Kostensoort4EindDatum,
+  :Kostenplaats1Code,
+  :Kostenplaats1Omschrijving,
+  :Kostenplaats1EindDatum,
+  :Kostenplaats2Code,
+  :Kostenplaats2Omschrijving,
+  :Kostenplaats2EindDatum,
+  :Kostenplaats3Code,
+  :Kostenplaats3Omschrijving,
+  :Kostenplaats3EindDatum,
+  :Kostenplaats4Code,
+  :Kostenplaats4Omschrijving,
+  :Kostenplaats4EindDatum,
+  :Kostenverdeling1,
+  :Kostenverdeling2,
+  :Kostenverdeling3,
+  :Kostenverdeling4)
+</db:sql>
+			<db:input-parameters ><![CDATA[#[{
+  Id: payload.Dienstverband.Id,
+  MedewerkerId: payload.Dienstverband.MedewerkerId,
+  FunctieCode: payload.Dienstverband.Functie.Code,
+  FunctieOmschrijving: payload.Dienstverband.Functie.Omschrijving,
+  FunctieKostprijs: payload.Dienstverband.Functie.Kostprijs,
+  FunctieProductiviteitsfactor: payload.Dienstverband.Functie.Productiviteitsfactor,
+  FunctieEindDatum: payload.Dienstverband.Functie.EindDatum,
+  DatumInDienst: payload.Dienstverband.DatumInDienst,
+  DatumUitDienst: payload.Dienstverband.DatumUitDienst,
+  UrenPerWeek: payload.Dienstverband.UrenPerWeek,
+  ParttimeFactor: payload.Dienstverband.ParttimeFactor,
+  UrenPerWeekMax: payload.Dienstverband.UrenPerWeekMax,
+  DagenPerWeek: payload.Dienstverband.DagenPerWeek,
+  IsOnbepaald: payload.Dienstverband.IsOnbepaald,
+  ORTBerekenenUit: payload.Dienstverband.ORTBerekenenUit,
+  ContractvormCode: payload.Dienstverband.Contractvorm.Code,
+  ContractvormIsSalaris: payload.Dienstverband.Contractvorm.IsSalaris,
+  ContractvormOmschrijving: payload.Dienstverband.Contractvorm.Omschrijving,
+  ContractNummer: payload.Dienstverband.Contract.Nummer,
+  ContractBeginDatum: payload.Dienstverband.Contract.BeginDatum,
+  ContractEindDatum: payload.Dienstverband.Contract.EindDatum,
+  AfdelingCode: payload.Dienstverband.Afdeling.Code,
+  AfdelingOmschrijving: payload.Dienstverband.Afdeling.Omschrijving,
+  AfdelingEindDatum: payload.Dienstverband.Afdeling.EindDatum,
+  AfdelingHoofdAfdelingCode: payload.Dienstverband.Afdeling.HoofdAfdeling.Code,
+  AfdelingHoofdAfdelingOmschrijving: payload.Dienstverband.Afdeling.HoofdAfdeling.Omschrijving,
+  Werklocatie: payload.Dienstverband.Werklocatie,
+  SalarisNominaal: payload.Dienstverband.SalarisNominaal,
+  SalarisJaarloon: payload.Dienstverband.SalarisJaarloon,
+  CAOCode: payload.Dienstverband.CAO.Code,
+  CAOOmschrijving: payload.Dienstverband.CAO.Omschrijving,
+  SchaalTredeId: payload.Dienstverband.SchaalTrede.Id,
+  SchaalTredeSchaal: payload.Dienstverband.SchaalTrede.Schaal,
+  SchaalTredeTrede: payload.Dienstverband.SchaalTrede.Trede,
+  SchaalTredeInpassingCode: payload.Dienstverband.SchaalTrede.InpassingCode,
+  SchaalTredeBedrag: payload.Dienstverband.SchaalTrede.Bedrag,
+  SchaalTredeOmschrijving: payload.Dienstverband.SchaalTrede.Omschrijving,
+  SchaalTredeBeginDatum: payload.Dienstverband.SchaalTrede.BeginDatum,
+  SchaalTredeEindDatum: payload.Dienstverband.SchaalTrede.EindDatum,
+  GarantieCAO: payload.Dienstverband.GarantieCAO,
+  GarantieSchaal: payload.Dienstverband.GarantieSchaal,
+  AncienniteitsMaand: payload.Dienstverband.AncienniteitsMaand,
+  ExtraPeriodiek: payload.Dienstverband.ExtraPeriodiek,
+  BlokkerenPeriodiek: payload.Dienstverband.BlokkerenPeriodiek,
+  OntslagCodeCode:payload.Dienstverband.OntslagCode.Code,
+  OntslagCodeOmschrijving:payload.Dienstverband.OntslagCode.Omschrijving,
+  Kostensoort1Code:payload.Dienstverband.Kostensoort1.Code,
+  Kostensoort1Omschrijving:payload.Dienstverband.Kostensoort1.Omschrijving,
+  Kostensoort1EindDatum:payload.Dienstverband.Kostensoort1.EindDatum,
+  Kostensoort2Code:payload.Dienstverband.Kostensoort2.Code,
+  Kostensoort2Omschrijving:payload.Dienstverband.Kostensoort2.Omschrijving,
+  Kostensoort2EindDatum:payload.Dienstverband.Kostensoort2.EindDatum,
+  Kostensoort3Code:payload.Dienstverband.Kostensoort3.Code,
+  Kostensoort3Omschrijving:payload.Dienstverband.Kostensoort3.Omschrijving,
+  Kostensoort3EindDatum:payload.Dienstverband.Kostensoort3.EindDatum,
+  Kostensoort4Code:payload.Dienstverband.Kostensoort4.Code,
+  Kostensoort4Omschrijving:payload.Dienstverband.Kostensoort4.Omschrijving,
+  Kostensoort4EindDatum:payload.Dienstverband.Kostensoort4.EindDatum,
+  Kostenplaats1Code:payload.Dienstverband.Kostenplaats1.Code,
+  Kostenplaats1Omschrijving:payload.Dienstverband.Kostenplaats1.Omschrijving,
+  Kostenplaats1EindDatum:payload.Dienstverband.Kostenplaats1.EindDatum,
+  Kostenplaats2Code:payload.Dienstverband.Kostenplaats2.Code,
+  Kostenplaats2Omschrijving:payload.Dienstverband.Kostenplaats2.Omschrijving,
+  Kostenplaats2EindDatum:payload.Dienstverband.Kostenplaats2.EindDatum,
+  Kostenplaats3Code:payload.Dienstverband.Kostenplaats3.Code,
+  Kostenplaats3Omschrijving:payload.Dienstverband.Kostenplaats3.Omschrijving,
+  Kostenplaats3EindDatum:payload.Dienstverband.Kostenplaats3.EindDatum,
+  Kostenplaats4Code:payload.Dienstverband.Kostenplaats4.Code,
+  Kostenplaats4Omschrijving:payload.Dienstverband.Kostenplaats4.Omschrijving,
+  Kostenplaats4EindDatum:payload.Dienstverband.Kostenplaats4.EindDatum,
+  Kostenverdeling1:payload.Dienstverband.Kostenverdeling1,
+  Kostenverdeling2:payload.Dienstverband.Kostenverdeling2,
+  Kostenverdeling3:payload.Dienstverband.Kostenverdeling3,
+  Kostenverdeling4:payload.Dienstverband.Kostenverdeling4
+}]]]></db:input-parameters>
+		</db:stored-procedure>
+	</flow>
+	<flow name="load_medewerkers" doc:id="baa25f4b-6905-4c2f-9606-e752775d648a" >
+		<jms:listener doc:name="listener_for_sdb_medewerker_queue" doc:id="041279af-8733-4803-9ac2-baa4df2e0ca8" config-ref="JMS_Config" destination="sdb_medewerker_queue"/>
+		<db:stored-procedure doc:name="Stored procedure" doc:id="31ee0bf2-bdd1-4a45-9d83-bf78c01bfad9" config-ref="local-sql">
+			<db:sql >call GGMDLOAD.Load_Medewerkers(:id, :voorletters, :tussenvoegsel, :AchterNaam, 
+:RoepNaam, :Geslacht, :GeboorteDatum, :DatumInSector, :GeboortePlaats, 
+:BurgerServiceNummer, :BurgerlijkestaatCode, :BurgerlijkestaatOmschrijving, :NationaliteitCode, 
+:NationaliteitOmschrijving, :Titel, :IsBedrijfsHulpverlener, :TenaamstellingCode, :TenaamstellingOmschrijving, 
+:Email, :PartnerVoorletters, :PartnerTussenvoegsel, :PartnerAchternaam, :PartnerGeboortedatum)</db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	id: payload.Medewerker.Id, 
+	voorletters: payload.Medewerker.Voorletters, 
+	tussenvoegsel: payload.Medewerker.Tussenvoegsel,
+	AchterNaam: payload.Medewerker.AchterNaam,
+ 	RoepNaam: payload.Medewerker.RoepNaam, 
+ 	Geslacht: payload.Medewerker.Geslacht, 
+ 	GeboorteDatum: payload.Medewerker.GeboorteDatum, 
+ 	DatumInSector: payload.Medewerker.DatumInSector, 
+ 	GeboortePlaats: payload.Medewerker.GeboortePlaats, 
+	BurgerServiceNummer: payload.Medewerker.BurgerServiceNummer, 
+	BurgerlijkestaatCode: payload.Medewerker.Burgerlijkestaat.Code, 
+	BurgerlijkestaatOmschrijving: payload.Medewerker.Burgerlijkestaat.Omschrijving, 
+	NationaliteitCode: payload.Medewerker.Nationaliteit.Code, 
+	NationaliteitOmschrijving: payload.Medewerker.Nationaliteit.Omschrijving, 
+	Titel: payload.Medewerker.Titel, 
+	IsBedrijfsHulpverlener: payload.Medewerker.IsBedrijfsHulpVerlener, 
+	TenaamstellingCode: payload.Medewerker.Tenaamstelling.Code, 
+	TenaamstellingOmschrijving: payload.Medewerker.Tenaamstelling.Omschrijving, 
+	Email: payload.Medewerker.Email, 
+	PartnerVoorletters: payload.Medewerker.PartnerVoorletters, 
+	PartnerTussenvoegsel: payload.Medewerker.PartnerTussenvoegsel, 
+	PartnerAchternaam: payload.Medewerker.PartnerAchternaam, 
+	PartnerGeboortedatum: payload.Medewerker.PartnerGeboortedatum
+}]]]></db:input-parameters>
+		</db:stored-procedure>
+	</flow>
+	<flow name="set_ROW_ID_in_sdb_load_tables" doc:id="9a8e844c-5a97-4a51-8572-1eb72d77c570" >
+		<http:listener doc:name="Listener" doc:id="aead1332-137d-48c7-abce-cd450bac1459" config-ref="listen_to_synchronizes_sdb" path="set_row_ids"/>
+		<db:stored-procedure doc:name="Stored procedure" doc:id="b1541585-f65b-4da1-861e-96083cff476a" config-ref="local-sql">
+			<db:sql >call set_ROW_ID_S();</db:sql>
+		</db:stored-procedure>
+	</flow>
+	<flow name="truncate_sdb_load_tables" doc:id="27fadc72-6073-4928-ba99-83b29859c926" doc:description="This is the first step in the synchronisation of the sdb_load tables. It truncates the four tables load_sdb_medewerkers, load_sdb_medewerkersadressen load_sdb_dienstverbanden and load_sdb_dienstverbanperiodes.">
+		<http:listener doc:name="Listener" doc:id="b6b11e1c-96a1-4aa9-9a4e-a6d75a0c4d2b" config-ref="listen_to_synchronizes_sdb" path="/truncate"/>
+		<db:stored-procedure doc:name="truncate all sbd tables" doc:id="500f83ed-fc40-44ae-9a46-1a22d53f7060" config-ref="local-sql">
+			<db:sql >call GGMDLOAD.truncate_sdb_tables()</db:sql>
+		</db:stored-procedure>
+	</flow>
+</mule>

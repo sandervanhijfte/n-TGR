@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="7cda5ec9-26d4-429a-81e8-de9f7367e6cb" basePath="/send_mail">
+		<http:listener-connection host="0.0.0.0" port="8010" />
+	</http:listener-config>
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="d9411f52-09e2-4870-981d-802de2cbd78a" >
+		<email:smtp-connection host="smtp.n-tgr.nl" port="587" user="sander@n-tgr.nl" password="xswcdevf.1" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
+	<flow name="send_error_mailFlow" doc:id="a242de74-4f02-4382-bc7d-878c12d5da48" >
+		<http:listener doc:name="Listener" doc:id="548e8670-6a9b-4e2f-83d8-b3a3906e2c93" config-ref="HTTP_Listener_config" path="/error_mail" allowedMethods="POST"/>
+		<email:send doc:name="Send" doc:id="7b6ecfec-2411-46ac-b54a-d292898c4dab" config-ref="Email_SMTP" fromAddress="sander@n-tgr.nl" subject="Mail from Sander">
+			<email:to-addresses >
+				<email:to-address value="sander@n-tgr.nl" />
+			</email:to-addresses>
+		</email:send>
+		<set-payload value="Succesfully send" doc:name="Set Payload" doc:id="d5aac5ff-ef26-4a89-89b6-89fcf7e7c296" />
+	</flow>
+</mule>
