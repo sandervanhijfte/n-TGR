@@ -128,12 +128,10 @@ output application/json
 
 {
   erorr:{
-  	component:vars.component_name,
-  	flow:vars.flow_name,
-	message:error.description,
-	time_stamp: now()
+  	
+	message:error.description
 	}
-
+	
 }]]]></jms:body>
 					</jms:message>
 				</jms:publish>

@@ -118,6 +118,8 @@ output application/json
 		<error-handler>
 			<on-error-continue enableNotifications="true"
 				logException="true" doc:name="On Error Continue" doc:id="032db7a9-361e-4185-a779-d9f1a8685700">
+				<logger level="ERROR" doc:name="Logger"
+					doc:id="2db16bad-6ac5-4539-9e54-ebd3e3b215a3" message="#[error.description]" />
 				<jms:publish doc:name="Publish"
 					doc:id="0d56e801-6ac4-4a9e-8c6d-76db9f79082f" config-ref="JMS_Config"
 					destination="error_queue">
@@ -128,12 +130,10 @@ output application/json
 
 {
   erorr:{
-  	component:vars.component_name,
-  	flow:vars.flow_name,
-	message:error.description,
-	time_stamp: now()
+  	
+	message:error.description
 	}
-
+	
 }]]]></jms:body>
 					</jms:message>
 				</jms:publish>
